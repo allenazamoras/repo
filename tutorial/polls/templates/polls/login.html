@@ -1,0 +1,21 @@
+{% load static %}
+
+<html>
+    <head>
+        <title>Polls - Login</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}"/>
+    </head>
+    <body>
+        <form>
+            <div class="container">
+                <label for="username"><b>Username</b></label>
+                <input type"text" placeholder="Enter Username" name="username" required>
+
+                <label for="password"><b>Password</b></label>
+                <input type="text" placeholder="EnterPassword" name="password" required>
+                
+                <button type="submit">Login</button>
+            </div>
+        </form>
+    </body>
+</html>
