@@ -1,8 +1,20 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
     {% if user.is_authenticated %}
-        Hi {{ user.username }}
+        Hi <strong>{{ user.username }}</strong>, vote away~  
+        {% if question_list %}
+            {% for question in question_list %}
+                <p><a href = "{% url 'polls:detail' question.id%}">{{ question.question_text }}</a></p>
+            {% endfor %}
+        {% else %}
+            <p>No polls available.</p>
+        {% endif %}
+        <br>
+        <p>
+            <a href="{% url 'polls:create' %}">Create Poll</a> | <a href="{% url 'logout' %}">Logout</a>
+        </p>
     {% else %}
         <p>You are not logged in</p>
         <a href="{% url 'login' %}">Login</a>

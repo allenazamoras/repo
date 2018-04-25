@@ -1,0 +1,29 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css"href="{% static  'polls/style.css' %}"/>
+
+<h3>Create a Poll</h3>
+
+<form action="{% url 'polls:create' %}" method="post">
+   {% csrf_token %}
+   <label for="question">Question: </label>
+   <input type="text" name="question"/>
+   
+   <br>
+   
+   <label for="c1">Choice: </label>
+   <input type="text" name="c1"/>
+
+   <br>
+
+   <label for="c2">Choice: </label>
+   <input type="text" name="c2"/>
+
+   <br>
+
+   <label for="c3">Choice: </label>
+   <input type="text" name="c3"/>
+
+   <br>
+   <button type="submit" value="Save">Create</button>
+</form>
