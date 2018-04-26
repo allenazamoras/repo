@@ -1,10 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 
-from .models import Question, Choice
+from .models import Question, Choice, Comment
 
 
 class IndexView(generic.ListView):
@@ -47,6 +47,20 @@ class CreateView(generic.edit.CreateView):
         c2.save()
         c3.save()
         return HttpResponseRedirect(reverse('polls:index'))
+
+
+class CommentView(generic.edit.CreateView):
+    model = Comment
+
+    def post(self, request):
+        print(request.POST)
+        req = request.POST
+        question = get_object_or_404(Question, pk=req['question'])
+        comment = Comment(user=request.user, question=question,
+                          comment_text=req['comment'])
+
+        comment.save()
+        return redirect('/polls/' + req['question'])
 
 
 def vote(request, question_id):
