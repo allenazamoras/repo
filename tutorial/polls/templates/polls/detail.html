@@ -7,17 +7,23 @@
 <br>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 {% if request.user != question.user %}
-    {{ question.voted_set.all }}
-    <form action="{% url 'polls:vote' question.id %}" method="post">
-        {% csrf_token %}
+    {% if has_voted == False %}
+        <form action="{% url 'polls:vote' question.id %}" method="post">
+            {% csrf_token %}
+            {% for choice in question.choice_set.all %}
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}"/>
+            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
+            <br>
+            {% endfor %}
+            <br>
+            <button type="submit">Vote</button>
+        </form>
+    {% else %}
+        <p>You've already voted, here are the results so far: </p>
         {% for choice in question.choice_set.all %}
-        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}"/>
-        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
-        <br>
+            <p>{{ choice.choice_text }} : <strong>{{choice.votes}}</strong></p>
         {% endfor %}
-        <br>
-        <button type="submit">Vote</button>
-    </form>
+    {% endif %}
 {% else %}
      <p>You made this poll, here are the results so far: </p>
     {% for choice in question.choice_set.all %}

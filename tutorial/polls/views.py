@@ -20,8 +20,11 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
     model = Question
     template_name = 'polls/detail.html'
 
-    def get_queryset(self):
-        return Question.objects.all()
+    def get_context_data(self, *args, **kwargs):
+        context = super(DetailView, self).get_context_data(*args, **kwargs)
+        question = context['question']
+        context['has_voted'] = question.has_voted(self.request.user)
+        return context
 
 
 class ResultsView(LoginRequiredMixin, generic.DetailView):

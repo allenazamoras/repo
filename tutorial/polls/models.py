@@ -8,6 +8,9 @@ class Question(models.Model):
     date_pub = models.DateTimeField("date published")
     show = models.IntegerField(default=0)
 
+    def has_voted(self, user):
+        return self.voted_set.filter(user=user).exists()
+
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
