@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Question, Choice, Comment
+from .models import Question, Choice, Comment, Voted
 
 
 class ChoiceInline(admin.TabularInline):
@@ -9,6 +9,10 @@ class ChoiceInline(admin.TabularInline):
 
 class CommentInline(admin.TabularInline):
     model = Comment
+
+
+class QuestionInline(admin.TabularInline):
+    model = Question
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -22,5 +26,13 @@ class QuestionAdmin(admin.ModelAdmin):
     search_fields = ['question_text']
 
 
+class VotedAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ('Question', {'fields': ['question']}),
+        ('User', {'fields': ['user']}),
+    ]
+
+
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Choice)
+admin.site.register(Voted, VotedAdmin)

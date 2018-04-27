@@ -5,7 +5,7 @@ from django.views import generic
 from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Question, Choice, Comment
+from .models import Question, Choice, Comment, Voted
 
 
 class IndexView(generic.ListView):
@@ -47,6 +47,7 @@ class CreateView(LoginRequiredMixin, generic.edit.CreateView):
         c1.save()
         c2.save()
         c3.save()
+
         return HttpResponseRedirect(reverse('polls:index'))
 
 
@@ -66,6 +67,7 @@ class CommentView(LoginRequiredMixin, generic.edit.CreateView):
 
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
+    print(question)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except(KeyError, Choice.DoesNotExist):
@@ -74,6 +76,8 @@ def vote(request, question_id):
             'error_message': "You didn't select a choice",
         })
     else:
+        voted = Voted(user=request.user, question=question)
+        voted.save()
         selected_choice.votes += 1
         selected_choice.save()
         return HttpResponseRedirect(reverse('polls:results',
