@@ -3,11 +3,12 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Question, Choice, Comment
 
 
-class IndexView(generic.ListView):
+class IndexView(LoginRequiredMixin, generic.ListView):
     template_name = 'polls/index.html'
     context_object_name = 'question_list'
 
@@ -15,7 +16,7 @@ class IndexView(generic.ListView):
         return Question.objects.all()
 
 
-class DetailView(generic.DetailView):
+class DetailView(LoginRequiredMixin, generic.DetailView):
     model = Question
     template_name = 'polls/detail.html'
 
@@ -23,12 +24,12 @@ class DetailView(generic.DetailView):
         return Question.objects.all()
 
 
-class ResultsView(generic.DetailView):
+class ResultsView(LoginRequiredMixin, generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
 
 
-class CreateView(generic.edit.CreateView):
+class CreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Question
     template_name = 'polls/create.html'
     fields = ['question_text']
@@ -49,7 +50,7 @@ class CreateView(generic.edit.CreateView):
         return HttpResponseRedirect(reverse('polls:index'))
 
 
-class CommentView(generic.edit.CreateView):
+class CommentView(LoginRequiredMixin, generic.edit.CreateView):
     model = Comment
 
     def post(self, request):
